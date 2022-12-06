@@ -1,20 +1,22 @@
-import {useEffect} from "react";
+import { useEffect, useState } from "react";
 
 /**
- * A hook that allows for debounce behavior. Will call a callback
- * function with the passed in value after a certain delay if the value hasn't changed.
+ * A hook that allows for debounce behavior. Will take in a value and a delay
  * @param {*} value - value to debounce, can be any type
- * @param {function} callback  - a function to call after value hasn't changed for the duration of the delay
  * @param {number} delay - delay in milliseconds to wait before calling the callback
  */
-export const useDebounce = ({ value, delay, callback }) => {
+export const useDebounce = (value, delay) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
   useEffect(() => {
-    const timer = setTimeout(() => callback(value), delay || 500);
+    const timer = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay || 500);
 
     return () => {
       clearTimeout(timer);
     };
   }, [value, delay]);
 
-  return value;
+  return debouncedValue;
 };
